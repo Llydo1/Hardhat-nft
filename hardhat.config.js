@@ -27,11 +27,11 @@ module.exports = {
             url: RPC_URL_GOERLI,
             accounts: [KEY_GOERLI],
             chainId: 5,
-            blockConfirmation: 6,
+            blockConfirmations: 6,
         },
         hardhat: {
             chainId: 31337,
-            blockConfirmation: 1,
+            blockConfirmations: 1,
             forking: {
                 url: RPC_URL_MAINET,
             },
