@@ -4,7 +4,7 @@ const { developmentChains } = require("../../helper-hardhat-config");
 
 developmentChains.includes(network.name) &&
     describe("Basic NFT unit test", () => {
-        let deployer;
+        let deployer, basicNft;
 
         beforeEach(async () => {
             deployer = (await getNamedAccounts()).deployer;

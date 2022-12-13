@@ -33,6 +33,7 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
     /* States varialbes */
     uint256 private s_tokenCounter = 0;
     mapping(uint256 => address) public requestIdToAddress;
+    uint256[] private s_requestIDs;
     uint256 private constant MAX_CHANCE_VALUE = 100;
     string[] internal s_waifuTokenUris;
     uint256 private immutable i_mintFee;
@@ -71,6 +72,7 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
             NUM_WORDS
         );
         requestIdToAddress[requestId] = msg.sender;
+        s_requestIDs.push(requestId);
         emit NftRequested(requestId, msg.sender);
     }
 
@@ -103,4 +105,49 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
     }
 
     // View & pure functions
+    function getGasLane() public view returns (bytes32) {
+        return i_gasLane;
+    }
+
+    function getSubscriptionId() public view returns (uint64) {
+        return i_subscriptionId;
+    }
+
+    function getCallbackGasLimit() public view returns (uint32) {
+        return i_callbackGasLimit;
+    }
+
+    function getRequestConfirmations() public pure returns (uint16) {
+        return REQUEST_CONFIRMATIONS;
+    }
+
+    function getNumWords() public pure returns (uint32) {
+        return NUM_WORDS;
+    }
+
+    function getMintFee() public view returns (uint256) {
+        return i_mintFee;
+    }
+
+    function getTokenCounter() public view returns (uint256) {
+        return s_tokenCounter;
+    }
+
+    function getMaxChanceValue() public pure returns (uint256) {
+        return MAX_CHANCE_VALUE;
+    }
+
+    function getTokenURI(uint256 index) public view returns (string memory) {
+        return s_waifuTokenUris[index];
+    }
+
+    function getRequestId(uint256 index) public view returns (uint256) {
+        return s_requestIDs[index];
+    }
+
+    function getRequestIdOwner(
+        uint256 requestId
+    ) public view returns (address) {
+        return requestIdToAddress[requestId];
+    }
 }

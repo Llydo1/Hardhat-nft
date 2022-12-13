@@ -8,7 +8,7 @@ const networkConfigs = {
         gaslane: "0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15",
         subscriptionId: "6220",
         callbackGasLimit: "500000",
-        mintFee: "10000000000000000",
+        mintFee: "1000000000000000",
         explorer_url: "https://goerli.etherscan.io/",
     },
     31337: {

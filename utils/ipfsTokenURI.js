@@ -2,7 +2,6 @@
 const pinataSDK = require("@pinata/sdk");
 const path = require("path");
 const fs = require("fs");
-const { Description } = require("@ethersproject/properties");
 require("dotenv").config();
 
 // Pinata API keys
@@ -43,14 +42,39 @@ const storeImages = async (imagesFilePath) => {
 
 const storeTokenURImetadata = async (imagesFilePath) => {
     const { responses: ipfsHashes, files } = await storeImages(imagesFilePath);
-    for (index in ipfsHashes) {
-        let name = files[index].replace(".gif", "");
-        name = name.split("_").join(" ");
-        console.log(ipfsHashes[index]);
-        console.log(name);
-    }
-};
 
-storeTokenURImetadata("./images/randomNft");
+    // Loop through waifus
+    let tokenURIs = [];
+    for (index in ipfsHashes) {
+        const name = files[index].replace(".gif", "").split("_").join(" ");
+        const metadata = {
+            name: name,
+            description: `beautiful ${name} just for you`,
+            image: `ipfs://${ipfsHashes[index]}`,
+            attributes: [
+                {
+                    trait_type:
+                        index == 0 ? "Nice waifu" : index == 1 ? "Cool waifu" : "Special Waifu",
+                    value: index == 0 ? 10 : index == 1 ? 30 : 100,
+                },
+            ],
+        };
+
+        // Upload Json to IPFS
+        const options = {
+            pinataMetadata: {
+                name: metadata.name,
+            },
+        };
+        try {
+            const resp = await pinata.pinJSONToIPFS(metadata, options);
+            tokenURIs.push(`ipfs://${resp.IpfsHash}`);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    console.log(tokenURIs);
+    return tokenURIs;
+};
 
 module.exports = { storeImages, storeTokenURImetadata };

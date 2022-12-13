@@ -14,10 +14,11 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
             from: deployer,
             log: true,
             args: args,
+            waitConfirmations: network.config.blockConfirmations || 1,
         });
         log("Mocks deployed");
         log("___________________________________________________");
     }
 };
 
-module.exports.tags = ["all", "mocks"];
+module.exports.tags = ["all", "mocks", "randomIpfs"];
