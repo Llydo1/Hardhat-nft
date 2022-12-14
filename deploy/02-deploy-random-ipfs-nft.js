@@ -3,9 +3,9 @@ const { developmentChains, networkConfigs } = require("../helper-hardhat-config"
 const { storeTokenURImetadata } = require("../utils/ipfsTokenURI");
 
 const defaultTokenURI = [
-    "ipfs://QmV7C8ADP6GmkkUXjgvpSgUCr4gr5WrBKX8evK5dgXRTgy",
-    "ipfs://QmeRStt7HKSUqSUovpWpMLw4VSmCxfMPi5KAzkgLJg9Bsq",
     "ipfs://QmQK5CT9BTdJxmNCuGuPYhyfZbnyVy65MHpj7bswz2t7YB",
+    "ipfs://QmeRStt7HKSUqSUovpWpMLw4VSmCxfMPi5KAzkgLJg9Bsq",
+    "ipfs://QmV7C8ADP6GmkkUXjgvpSgUCr4gr5WrBKX8evK5dgXRTgy",
 ];
 
 module.exports = async ({ deployments, getNamedAccounts }) => {

@@ -47,9 +47,9 @@ developmentChains.includes(network.name) &&
             });
 
             it("Initialize token URIs correctly", async () => {
-                const foxy = await randomIpfs.getTokenURI(0);
+                const foxy = await randomIpfs.getTokenURI(2);
                 const korone = await randomIpfs.getTokenURI(1);
-                const rebecca = await randomIpfs.getTokenURI(2);
+                const rebecca = await randomIpfs.getTokenURI(0);
                 assert.equal(foxy, "ipfs://QmV7C8ADP6GmkkUXjgvpSgUCr4gr5WrBKX8evK5dgXRTgy");
                 assert.equal(korone, "ipfs://QmeRStt7HKSUqSUovpWpMLw4VSmCxfMPi5KAzkgLJg9Bsq");
                 assert.equal(rebecca, "ipfs://QmQK5CT9BTdJxmNCuGuPYhyfZbnyVy65MHpj7bswz2t7YB");
@@ -164,14 +164,30 @@ developmentChains.includes(network.name) &&
                 await expect(userRandomIpfs.withdraw()).to.be.reverted;
             });
 
-            it("User balance should be update", async () => {
+            it("Owner of contract can withdraw and balance should be updated", async () => {
                 const initialBalance = await ethers.provider.getBalance(deployer);
                 const tx = await randomIpfs.withdraw();
                 const receipt = await tx.wait(1);
-                const gasUsed =
-                    BigInt(receipt.cumulativeGasUsed) * BigInt(receipt.effectiveGasPrice);
+                const gasUsed = receipt.cumulativeGasUsed.mul(receipt.effectiveGasPrice);
                 const newBalance = await ethers.provider.getBalance(deployer);
-                assert.equal(initialBalance.toString(), newBalance.sub(gasUsed).toString());
+                assert.equal(
+                    initialBalance.add(ethers.utils.parseEther("0.02")).toString(),
+                    newBalance.add(gasUsed).toString()
+                );
+            });
+        });
+
+        describe("Multiple request nft", () => {
+            it("lets go", async () => {
+                const accounts = await ethers.getSigners();
+                for (let i = 0; i < 10; i++) {
+                    const minterRandomIpfs = randomIpfs.connect(accounts[i]);
+                    (await minterRandomIpfs.requestNft({ value: mintFee })).wait(1);
+                    const requestId = await minterRandomIpfs.getRequestId(i);
+                    await vrfCoordinatorV2Mock.fulfillRandomWords(requestId, randomIpfs.address);
+                    console.log(await minterRandomIpfs.tokenURI(i));
+                    assert.equal(1, 1);
+                }
             });
         });
     });
