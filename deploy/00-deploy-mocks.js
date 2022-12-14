@@ -1,6 +1,9 @@
 const { ethers, network } = require("hardhat");
 const { developmentChains } = require("../helper-hardhat-config");
 
+const DECIMALS = "18";
+const INTIAL_ANSWER = ethers.utils.parseUnits("2000", "ether");
+
 module.exports = async ({ deployments, getNamedAccounts }) => {
     const { deployer } = await getNamedAccounts();
     const { log, deploy } = deployments;
@@ -16,9 +19,16 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
             args: args,
             waitConfirmations: network.config.blockConfirmations || 1,
         });
-        log("Mocks deployed");
+
+        await deploy("MockV3Aggregator", {
+            from: deployer,
+            log: true,
+            args: [DECIMALS, INTIAL_ANSWER],
+            waitConfirmations: network.config.blockConfirmations || 1,
+        });
+        log("VRFCoordinatorV2Mock and MockV3Aggregator deployed");
         log("___________________________________________________");
     }
 };
 
-module.exports.tags = ["all", "mocks", "randomIpfs"];
+module.exports.tags = ["all", "mocks", "randomIpfs", "dynamicSvg"];

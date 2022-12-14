@@ -35,6 +35,10 @@ module.exports = {
             forking: {
                 url: RPC_URL_MAINET,
             },
+            allowUnlimitedContractSize: true,
+            timeout: 1800000,
+            gas: 12000000,
+            blockGasLimit: 0x1fffffffffffff,
         },
     },
     namedAccounts: {

@@ -10,6 +10,7 @@ const networkConfigs = {
         callbackGasLimit: "500000",
         mintFee: "1000000000000000",
         explorer_url: "https://goerli.etherscan.io/",
+        ethUsdPriceFeedAddress: "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e",
     },
     31337: {
         name: "hardhat",
