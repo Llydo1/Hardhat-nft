@@ -1,6 +1,7 @@
 const { network, ethers } = require("hardhat");
 const { developmentChains, networkConfigs } = require("../helper-hardhat-config");
 const fs = require("fs");
+const { verify } = require("../utils/verify");
 
 module.exports = async function ({ deployments, getNamedAccounts }) {
     const { deployer } = await getNamedAccounts();
@@ -36,4 +37,4 @@ module.exports = async function ({ deployments, getNamedAccounts }) {
     }
 };
 
-module.exports.tags = ["all", "dynamicSvg"];
+module.exports.tags = ["all", "dynamicSvg", "main"];

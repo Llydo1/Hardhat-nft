@@ -1,6 +1,7 @@
 const { network, ethers } = require("hardhat");
 const { developmentChains, networkConfigs } = require("../helper-hardhat-config");
 const { storeTokenURImetadata } = require("../utils/ipfsTokenURI");
+const { verify } = require("../utils/verify");
 
 const defaultTokenURI = [
     "ipfs://QmQK5CT9BTdJxmNCuGuPYhyfZbnyVy65MHpj7bswz2t7YB",
@@ -62,4 +63,4 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
     }
 };
 
-module.exports.tags = ["all", "randomIpfs"];
+module.exports.tags = ["all", "randomIpfs", "main"];

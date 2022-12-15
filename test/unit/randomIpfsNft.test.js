@@ -141,6 +141,37 @@ developmentChains.includes(network.name) &&
                 const onwer = await randomIpfs.ownerOf(0);
                 assert.equal(onwer, deployer);
             });
+
+            it("mints NFT after random number is returned", async function () {
+                await new Promise(async (resolve, reject) => {
+                    randomIpfs.once("NftMinted", async () => {
+                        try {
+                            const tokenUri = await randomIpfs.tokenURI("0");
+                            const tokenCounter = await randomIpfs.getTokenCounter();
+                            assert.equal(tokenUri.toString().includes("ipfs://"), true);
+                            assert.equal(tokenCounter.toString(), "1");
+                            resolve();
+                        } catch (e) {
+                            console.log(e);
+                            reject(e);
+                        }
+                    });
+                    try {
+                        const fee = await randomIpfs.getMintFee();
+                        const requestNftResponse = await randomIpfs.requestNft({
+                            value: fee.toString(),
+                        });
+                        const requestNftReceipt = await requestNftResponse.wait(1);
+                        await vrfCoordinatorV2Mock.fulfillRandomWords(
+                            requestNftReceipt.events[1].args.requestId,
+                            randomIpfs.address
+                        );
+                    } catch (e) {
+                        console.log(e);
+                        reject(e);
+                    }
+                });
+            });
         });
 
         describe("Withdraw", () => {
@@ -186,6 +217,8 @@ developmentChains.includes(network.name) &&
                     const requestId = await minterRandomIpfs.getRequestId(i);
                     await vrfCoordinatorV2Mock.fulfillRandomWords(requestId, randomIpfs.address);
                     console.log(await minterRandomIpfs.tokenURI(i));
+                    console.log((await minterRandomIpfs.getRequestId(i)).toString());
+
                     assert.equal(1, 1);
                 }
             });
